@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Read More</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
+      <!-- Collapsible wrapper -->
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="logo">
+            <a href="/"><img src="images/logo.png" alt="#" /></a>
+         </div>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/league">Countries</a>
+        </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/blog">Blog</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#">Something</a>
+          </li>
+        </ul>
+        <!-- Left links -->
+      </div>
+      <!-- Collapsible wrapper -->
+  
+      <!-- Right elements -->
+      <div class="d-flex align-items-center">
+        <!-- Icon -->
+        <a class="text-reset me-3" href="#">
+          <i class="fas fa-shopping-cart"></i>
+        </a>
+
+        <% if (loggedIn || isAdmin) { %>
+            <li class="has-children">
+                <a href="/logout" class="nav-link"><%= translations.logout %></a>
+            </li>
+        <% } else { %>
+            <li class="has-children">
+                <a href="/login" class="nav-link"><%= translations.signIn %></a>
+            </li>
+            <li class="has-children">
+                <a href="/registration" class="nav-link"><%= translations.joinNow %></a>
+            </li>
+        <% } %>
+      </div>
+      <!-- Right elements -->
+    </div>
+    <!-- Container wrapper -->
+  </nav>
+
+<div class="container mt-5">
+    <div class="row">
+        <% let counter = 0; %>
+        <% data.forEach(function(area) { %>
+            <% if(counter < 12) { %>
+                <div class="col-md-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title"><%= area.Name %></h5>
+                            <p class="card-text">Competitions:</p>
+                            <ul>
+                                <% area.Competitions.forEach(function(competition) { %>
+                                    <li><%= competition.Name %> (<%= competition.Seasons.length %> seasons)</li>
+                                <% }); %>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <% counter++; %>
+            <% } %>
+        <% }); %>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.sticky.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        function changeLanguage(selectedLanguage) {
+            // Retain the pathname and search query, just update the lang query parameter
+            var currentLocation = window.location;
+            var newLangQuery = 'lang=' + selectedLanguage;
+            var newLocation = currentLocation.protocol + '//' + currentLocation.host + currentLocation.pathname + '?' + newLangQuery;
+            window.location = newLocation;
+        }
+        </script>
+    <!-- ALL JS FILES -->
+    <script src="js/all.js"></script>
+    <!-- ALL PLUGINS -->
+    <script src="js/custom.js"></script>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.3.1/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

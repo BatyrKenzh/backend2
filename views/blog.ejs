@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog</title>
+    <link rel="stylesheet" href="css/bootstrap.min">
+    <style>
+    .post-box {
+        border: 1px solid #ddd;
+        padding: 15px;
+        margin-bottom: 20px;
+        text-align: center;
+    }
+    
+    .img-fluid {
+        max-height: 100px;
+        width: auto;
+        margin-bottom: 10px;
+    }
+
+    </style>
+</head>
+<body>
+        <!-- LOADER -->
+        <div id="preloader">
+            <img class="preloader" src="images/loading-img.gif" alt="">
+        </div>
+        <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
+          <!-- Collapsible wrapper -->
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="logo">
+                <a href="/"><img src="images/logo.png" alt="#" /></a>
+             </div>
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" href="/"><%= translations.home %></a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/league"> <%= translations.countries %> </a>
+            </li>
+              <li class="nav-item">
+                <a class="nav-link" href="/blog"><%= translations.blog %></a>
+              </li>
+            </ul>
+            <!-- Left links -->
+          </div>
+          <!-- Collapsible wrapper -->
+      
+          <!-- Right elements -->
+          <div class="d-flex align-items-center">
+            <!-- Icon -->
+            <a class="text-reset me-3" href="#">
+              <i class="fas fa-shopping-cart"></i>
+            </a>
+    
+            <select name="language" id="language" onchange="changeLanguage(this.value)">
+                <option value="en" <%= language === 'en' ? 'selected' : '' %>>English</option>
+                <option value="ru" <%= language === 'ru' ? 'selected' : '' %>>Russian</option>
+            </select>
+
+            <% if (loggedIn || isAdmin) { %>
+                <li class="has-children">
+                    <a href="/logout" class="nav-link"><%= translations.logout %></a>
+                </li>
+            <% } else { %>
+                <li class="has-children">
+                    <a href="/login" class="nav-link"><%= translations.signIn %></a>
+                </li>
+                <li class="has-children">
+                    <a href="/registration" class="nav-link"><%= translations.joinNow %></a>
+                </li>
+            <% } %>
+          </div>
+          <!-- Right elements -->
+        </div>
+        <!-- Container wrapper -->
+      </nav>
+
+
+    <div class="button-container">
+        <% if (isAdmin) { %>
+            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addPostModal">
+                <%= translations.addPost %>
+            </button>
+        <% } %>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <% posts.forEach(function(post) { %>
+                <div class="col-lg-4 col-md-6">
+                    <div class="post-box">
+                        <img src="/images/<%= post._id %>/image1" alt="Image 1" class="img-fluid">
+                        <img src="/images/<%= post._id %>/image2" alt="Image 2" class="img-fluid">
+                        <img src="/images/<%= post._id %>/image3" alt="Image 3" class="img-fluid">
+                        <h2><%= language === 'en' ? post.name_en : post.name_ru %></h2>
+                        <p><%= language === 'en' ? post.description_en : post.description_ru %></p>
+                        <% if (isAdmin) { %>
+                            <!-- Delete Post Form -->
+                            <form action="/admin/delete-post/<%= post._id %>" method="post">
+                                <button type="submit" class="delete-button btn btn-danger">Delete</button>
+                            </form>
+                        <% } %>
+                    </div>
+                </div>
+            <% }); %>
+        </div>
+    </div>
+    
+
+            <!-- The Modal -->
+<div class="modal fade" id="addPostModal" tabindex="-1" role="dialog" aria-labelledby="addPostModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="addPostModalLabel"><%= translations.addNewPost %></h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <!-- Place your form inside the modal body -->
+          <form id="addPostForm" action="/admin/add-post" method="POST" enctype="multipart/form-data">
+              <input type="text" name="name_en" placeholder="<%= translations.name %> (EN)" required>
+              <input type="text" name="name_ru" placeholder="<%= translations.name %> (RU)" required>
+              <textarea name="description_en" placeholder="<%= translations.desc %> (EN)" required></textarea>
+              <textarea name="description_ru" placeholder="<%= translations.desc %> (RU)" required></textarea>
+              <input type="file" name="image1" accept="image/*" required>
+              <input type="file" name="image2" accept="image/*" required>
+              <input type="file" name="image3" accept="image/*" required>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal"><%= translations.close %></button>
+                <button type="submit" class="btn btn-primary"><%= translations.submit %></button>
+              </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+    <script>
+        function changeLanguage(selectedLanguage) {
+            var currentLocation = window.location;
+            var newLangQuery = 'lang=' + selectedLanguage;
+            var newLocation = currentLocation.protocol + '//' + currentLocation.host + currentLocation.pathname + '?' + newLangQuery;
+            window.location = newLocation;
+        }
+    </script>
+    <!-- Include Bootstrap CSS -->
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <!-- ALL JS FILES -->
+    <script src="js/all.js"></script>
+    <!-- ALL PLUGINS -->
+    <script src="js/custom.js"></script>
+</body>
+</html>

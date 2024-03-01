@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Countries</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+        .countries-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .countries-table th, .countries-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .countries-table th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
+        <!-- Collapsible wrapper -->
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <div class="logo">
+              <a href="/"><img src="images/logo.png" alt="#" /></a>
+           </div>
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link" href="/"> <%= translations.home %></a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/league"> <%= translations.countries %></a>
+          </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/blog"> <%= translations.blog %> </a>
+            </li>
+            <% if (isAdmin) { %>
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin"> <%= translations.admin %> </a>
+                </li>
+            <% } %>
+          </ul>
+          <!-- Left links -->
+        </div>
+        <!-- Collapsible wrapper -->
+    
+        <!-- Right elements -->
+        <div class="d-flex align-items-center">
+          <!-- Icon -->
+          <a class="text-reset me-3" href="#">
+            <i class="fas fa-shopping-cart"></i>
+          </a>
+          <select name="language" id="language" onchange="changeLanguage(this.value)">
+            <option value="en" <%= language === 'en' ? 'selected' : '' %>>English</option>
+            <option value="ru" <%= language === 'ru' ? 'selected' : '' %>>Russian</option>
+            </select>
+        <li class="has-children">
+            <a href="/logout" class="nav-link"><%= translations.logout %></a>
+        </li>
+        </div>
+        <!-- Right elements -->
+      </div>
+      <!-- Container wrapper -->
+    </nav>
+
+<% if(countries && countries.length > 0) { %>
+    <table class="countries-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Continent</th>
+                <th>Code</th>
+            </tr>
+        </thead>
+        <tbody>
+            <% countries.forEach(function(country) { %>
+                <tr>
+                    <td><%= country.id %></td>
+                    <td><%= country.name %></td>
+                    <td><%= country.continent %></td>
+                    <td><%= country.code %></td>
+                </tr>
+            <% }) %>
+        </tbody>
+    </table>
+<% } else { %>
+    <p>No countries data available.</p>
+<% } %>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.sticky.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        function changeLanguage(selectedLanguage) {
+            var currentLocation = window.location;
+            var newLangQuery = 'lang=' + selectedLanguage;
+            var newLocation = currentLocation.protocol + '//' + currentLocation.host + currentLocation.pathname + '?' + newLangQuery;
+            window.location = newLocation;
+        }
+        </script>
+    <script src="js/all.js"></script>
+    <script src="js/custom.js"></script>
+</body>
+</html>

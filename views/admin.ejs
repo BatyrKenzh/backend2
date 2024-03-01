@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+   <title>Admin</title>
+
+   <style>
+    .modal {
+        display: none; 
+        position: fixed;
+        z-index: 1; 
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgb(0,0,0); 
+        background-color: rgba(0,0,0,0.4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .modal-content {
+        background-color: purple;
+        margin: auto;
+        padding: 20px;
+        border: 1px solid #888;
+        width: 50%;
+        max-width: 400px;
+    }
+
+    .close {
+        color: #aaaaaa;
+        float: right;
+        font-size: 28px;
+        font-weight: bold;
+    }
+
+    .close:hover,
+    .close:focus {
+        color: #000;
+        text-decoration: none;
+        cursor: pointer;
+    }
+
+    @media screen and (max-width: 768px) {
+        .modal-content {
+            width: 90%; /* Smaller devices width */
+            max-width: none; /* Remove max-width on smaller devices */
+        }
+    }
+</style>
+
+</head>
+<body>
+    <!-- LOADER -->
+    <div id="preloader">
+        <img class="preloader" src="images/loading-img.gif" alt="">
+    </div>
+    <!-- Navbar -->
+<nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
+      <!-- Collapsible wrapper -->
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <div class="logo">
+            <a href="/"><img src="images/logo.png" alt="#" /></a>
+         </div>
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link" href="/"><%= translations.home %></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/league"><%= translations.countries %></a>
+        </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/blog"><%= translations.blog %></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin"><%= translations.admin %></a>
+          </li>
+        </ul>
+        <!-- Left links -->
+      </div>
+      <!-- Collapsible wrapper -->
+  
+      <!-- Right elements -->
+      <div class="d-flex align-items-center">
+        <!-- Icon -->
+        <a class="text-reset me-3" href="#">
+          <i class="fas fa-shopping-cart"></i>
+        </a>
+
+
+        <select name="language" id="language" onchange="changeLanguage(this.value)">
+            <option value="en" <%= language === 'en' ? 'selected' : '' %>>English</option>
+            <option value="ru" <%= language === 'ru' ? 'selected' : '' %>>Russian</option>
+        </select>
+        <li class="has-children">
+            <a href="/logout" class="nav-link"><%= translations.logout %></a>
+        </li>
+      </div>
+      <!-- Right elements -->
+    </div>
+    <!-- Container wrapper -->
+  </nav>
+  <!-- Navbar -->
+      <h1><%= translations.adminPanel %></h1>
+      <table>
+          <thead>
+              <tr>
+                  <th><%= translations.username %></th>
+                  <th><%= translations.firstname %></th>
+                  <th><%= translations.lastname %></th>
+                  <th><%= translations.edit %></th>
+                  <th><%= translations.delete %></th>
+              </tr>
+          </thead>
+  
+          <button id="myBtn"><%= translations.addNew %></button>
+  
+          <!-- The Modal -->
+          <div id="myModal" class="modal">
+              <div class="modal-content">
+                  <span class="close">&times;</span>
+                  <form action="/admin/adduser" method="post">
+                      <label for="username">Username:</label>
+                      <input type="text" id="username" name="username"><br><br>
+                      <label for="firstName">First Name:</label>
+                      <input type="text" id="firstName" name="firstName" required><br><br>
+                      <label for="lastName">Last Name:</label>
+                      <input type="text" id="lastName" name="lastName" required><br><br>
+                      <label for="password">Password:</label>
+                      <input type="password" id="password" name="password"><br><br>
+                      <input type="submit" value="Create User">
+                      <button type="button" class="cancelBtn">Cancel</button>
+                  </form>
+              </div>
+          </div>
+          <!-- Delete Confirmation Modal -->
+          <div id="deleteModal" class="modal">
+              <div class="modal-content">
+                  <span class="close">&times;</span>
+                  <p>Are you sure you want to delete <span id="deleteUsername"></span>?</p>
+                  <form id="deleteForm" action="" method="post">
+                      <input type="submit" value="Delete">
+                      <button type="button" class="cancelBtn">Cancel</button>
+                  </form>
+              </div>
+          </div>
+  
+          <div id="editModal" class="modal">
+              <div class="modal-content">
+                  <span class="close">&times;</span>
+                  <form id="editForm" method="post">
+                      <input type="hidden" id="editUserId" name="userId">
+                      <label for="editUsername"><%= translations.username %>:</label>
+                      <input type="text" id="editUsername" name="username"><br><br>
+                      <input type="submit" value="Update User">
+                      <button type="button" class="cancelBtn"><%= translations.cancel %></button>
+                  </form>
+              </div>
+          </div>
+          <tbody>
+              <% users.forEach(user => { %>
+                  <tr>
+                      <td><%= user.username %></td>
+                      <td><%= user.firstName %></td>
+                      <td><%= user.lastName %></td>
+                      <td>
+                          <button class="editBtn" data-userid="<%= user._id %>"><%= translations.edit %></button>
+                      </td>
+                      <td>
+                          <button class="deleteBtn" data-userid="<%= user._id %>"><%= translations.delete %></button>
+                      </td>
+                  </tr>
+              <% }) %>
+          </tbody>
+      </table>
+
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.sticky.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        function changeLanguage(selectedLanguage) {
+            var currentLocation = window.location;
+            var newLangQuery = 'lang=' + selectedLanguage;
+            var newLocation = currentLocation.protocol + '//' + currentLocation.host + currentLocation.pathname + '?' + newLangQuery;
+            window.location = newLocation;
+        }
+        </script>
+    <script src="js/all.js"></script>
+    <script src="js/custom.js"></script>
+    <script>
+        var modal = document.getElementById("myModal");
+        var btn = document.getElementById("myBtn");
+        var span = document.getElementsByClassName("close")[0];
+        var cancelBtn = document.getElementsByClassName("cancelBtn")[0];
+        btn.onclick = function() {
+            modal.style.display = "block";
+        }
+        span.onclick = function() {
+            modal.style.display = "none";
+        }
+        cancelBtn.onclick = function() {
+            modal.style.display = "none";
+        }
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = "none";
+            }
+        }
+        document.querySelectorAll('.deleteBtn').forEach(button => {
+            button.addEventListener('click', function() {
+            var userId = this.dataset.userid;
+            document.getElementById('deleteUsername').textContent = this.dataset.username;
+            document.getElementById('deleteForm').action = '/admin/deleteuser/' + userId;
+            document.getElementById('deleteModal').style.display = 'block';
+            });
+        });
+        document.querySelectorAll('.editBtn').forEach(button => {
+            button.addEventListener('click', function() {
+                var userId = this.dataset.userid;
+                document.getElementById('editForm').action = '/admin/edituser/' + userId;
+                document.getElementById('editModal').style.display = 'block';
+            });
+        });
+        document.querySelectorAll('.cancelBtn').forEach(button => {
+            button.addEventListener('click', function() {
+                this.closest('.modal').style.display = 'none';
+            });
+        });
+    </script>
+</body>
+</html>

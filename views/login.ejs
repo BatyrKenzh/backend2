@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>Login</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <link rel="stylesheet" href="css/style.css">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="css/bootstrap.min">
+</head>
+<body>
+  <div id="preloader">
+    <img class="preloader" src="images/loading-img.gif" alt="">
+</div>
+<nav class="navbar navbar-expand-lg navbar-light bg-body-tertiary">
+  <!-- Collapsible wrapper -->
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <div class="logo">
+        <a href="/"><img src="images/logo.png" alt="#" /></a>
+     </div>
+    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+      <li class="nav-item">
+        <a class="nav-link" href="/">Home</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/league">Countries</a>
+    </li>
+      <li class="nav-item">
+        <a class="nav-link" href="/blog">Blog</a>
+      </li>
+    </ul>
+    <!-- Left links -->
+  </div>
+  <!-- Collapsible wrapper -->
+
+  <!-- Right elements -->
+  <div class="d-flex align-items-center">
+    <!-- Icon -->
+    <a class="text-reset me-3" href="#">
+      <i class="fas fa-shopping-cart"></i>
+    </a>
+
+
+    <select name="language" id="language" onchange="changeLanguage(this.value)">
+        <option value="en" <%= language === 'en' ? 'selected' : '' %>>English</option>
+        <option value="ru" <%= language === 'ru' ? 'selected' : '' %>>Russian</option>
+    </select>
+  </div>
+  <!-- Right elements -->
+</div>
+<!-- Container wrapper -->
+</nav>
+  
+    <!-- Carousel wrapper -->
+    <div id="introCarousel" class="carousel slide carousel-fade shadow-2-strong" data-mdb-carousel-init>
+      <!-- Indicators -->
+      <div class="carousel-indicators">
+        <li data-mdb-target="#introCarousel" data-mdb-slide-to="0" class="active"></li>
+        <li data-mdb-target="#introCarousel" data-mdb-slide-to="1"></li>
+        <li data-mdb-target="#introCarousel" data-mdb-slide-to="2"></li>
+      </div>
+  
+      <!-- Inner -->
+      <div class="carousel-inner">
+  </header>
+
+<section class="text-center">
+  <div class="p-5 bg-image" style="
+        background-image: url('https://mdbootstrap.com/img/new/textures/full/171.jpg');
+        height: 300px;
+        "></div>
+
+  <div class="card mx-4 mx-md-5 shadow-5-strong" style="
+        margin-top: -100px;
+        background: hsla(0, 0%, 100%, 0.8);
+        backdrop-filter: blur(30px);
+        ">
+    <div class="card-body py-5 px-md-5">
+
+      <div class="row d-flex justify-content-center">
+        <div class="col-lg-8">
+          <h2 class="fw-bold mb-5"><%= translations.login %></h2>
+          <form action="/login" method="post">
+              <div class="form-outline mb-4">
+                  <input type="text" name="username" class="form-control" required/>
+                  <label class="form-label" for="form3Example4"><%= translations.username %></label>
+              </div>
+
+            <!-- Password input -->
+            <div class="form-outline mb-4">
+              <input type="password" name="password" class="form-control" required/>
+              <label class="form-label" for="form3Example4"><%= translations.password %></label>
+            </div>
+
+            <p>Admin Account</p>
+            <p>login: batyr, password: 20042004</p>
+
+            <!-- Submit button -->
+            <button type="submit" class="btn btn-primary btn-block mb-4">
+              <%= translations.login %>
+            </button>
+
+            <!-- Register buttons -->
+            <div class="text-center">
+              <div class="text-center p-t-136">
+                <p><%= translations.dontHave %>
+                  <a class="txt2" href="/register">Register here
+                    <i class="fa fa-long-arrow-right m-l-5" aria-hidden="true"></i>
+                  </a>
+                </p>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="js/popper.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/jquery.sticky.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        function changeLanguage(selectedLanguage) {
+            var currentLocation = window.location;
+            var newLangQuery = 'lang=' + selectedLanguage;
+            var newLocation = currentLocation.protocol + '//' + currentLocation.host + currentLocation.pathname + '?' + newLangQuery;
+            window.location = newLocation;
+        }
+    </script>
+    <!-- ALL JS FILES -->
+    <script src="js/all.js"></script>
+    <!-- ALL PLUGINS -->
+    <script src="js/custom.js"></script> 
+</body>
+</html>
